@@ -24,6 +24,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('userForm');
     const userList = document.getElementById('userList');
+    let editingLi = null;
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -50,16 +51,61 @@ document.addEventListener('DOMContentLoaded', function() {
         li.textContent = `Name: ${userData_deserialize.name}, Email: ${userData_deserialize.email}, Password: ${userData_deserialize.password}`;
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
+        const editButton = document.createElement('button');
+        editButton.textContent = 'edit';
+
         deleteButton.addEventListener('click', function() {
             // Remove the user data from local storage and the list item from the DOM
             localStorage.removeItem('user');
             userList.removeChild(li);
         });
+
+        editButton.addEventListener('click', function() {
+            populateFormFields(userData_deserialize); // Populate form fields for editing
+            editingLi = li; // Store the editing li element for updating later
+        });
+
         li.appendChild(deleteButton);
+        li.appendChild(editButton);
         userList.appendChild(li);
 
     });
+
+    function populateFormFields(userData) {
+        document.getElementById('name').value = userData.name;
+        document.getElementById('email').value = userData.email;
+        document.getElementById('password').value = userData.password;
+    }
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        
+        if (editingLi) {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            const updatedData = {
+                name: name,
+                email: email,
+                password: password
+            };
+
+            const editedText = `Name: ${name}, Email: ${email}, Password: ${password}`;
+            editingLi.textContent = editedText;
+            
+            // Update local storage or perform other necessary updates here
+            editingLi = null; // Clear the editing reference
+        }
+        
+        resetForm();
+    });
+    function resetForm() {
+        form.reset();
+    }
 });
+
+
 </script>
 
 </body>
