@@ -17,10 +17,13 @@
 
     <input id="btn" type="submit">
 </form>
+<ul id="userList">
+</ul>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const form = document.getElementById('userForm');
+    const userList = document.getElementById('userList');
 
     form.addEventListener('submit', function(event) {
         event.preventDefault();
@@ -40,6 +43,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
         alert('User data saved to local storage!');
         console.log(localStorage.getItem('user'));
+
+        let userData_deserialize = JSON.parse(localStorage.getItem('user'));
+
+        const li = document.createElement('li');
+        li.textContent = `Name: ${userData_deserialize.name}, Email: ${userData_deserialize.email}, Password: ${userData_deserialize.password}`;
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', function() {
+            // Remove the user data from local storage and the list item from the DOM
+            localStorage.removeItem('user');
+            userList.removeChild(li);
+        });
+        li.appendChild(deleteButton);
+        userList.appendChild(li);
+
     });
 });
 </script>
