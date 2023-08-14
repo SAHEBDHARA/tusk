@@ -1,25 +1,48 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Form Example</title>
 </head>
 <body>
-    <h1>creteing some stuff in local storage</h1>
 
-    <script>
-        let myobj = {
-            name: 'saheb',
-            age: 36,
-        }
-        let myobj_serialized = JSON.stringify(myobj); 
-        console.log(myobj_serialized)
+<form class="form" id="userForm" action="#">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name">
 
-        localStorage.setItem('myobj', myobj_serialized)
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email">
 
-        let myobj_deserialized = JSON.parse(localStorage.getItem('myobj'));
-        console.log(myobj_deserialized);
-    </script>
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password">
+
+    <input id="btn" type="submit">
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('userForm');
+
+    form.addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        const userData = {
+            name: name,
+            email: email,
+            password: password
+        };
+
+        // Convert the object to a JSON string and save to local storage
+        localStorage.setItem('user', JSON.stringify(userData));
+
+        alert('User data saved to local storage!');
+        console.log(localStorage.getItem('user'));
+    });
+});
+</script>
+
 </body>
 </html>
