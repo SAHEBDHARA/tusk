@@ -16,3 +16,6 @@ function filterItems(e){
     }
   });
 }
+
+var n = 9; 
+console.log(n); 
