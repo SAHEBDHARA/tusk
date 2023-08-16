@@ -55,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function() {
         editButton.textContent = 'edit';
 
         deleteButton.addEventListener('click', function() {
-            // Remove the user data from local storage and the list item from the DOM
             localStorage.removeItem('user');
             userList.removeChild(li);
         });
