@@ -33,53 +33,49 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-const userData = {
-    name: name,
-    email: email,
-    password: password
-};
+        const userData = {
+            name: name,
+            email: email,
+            password: password
+        };
 
-// Save user data using Axios
-axios.post('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata', userData)
-     .then(res => {
-         console.log(res.data); // The response data from the server
-         alert('User data saved via Axios!');
-         // You can perform further actions with the response data here
-     })
-     .catch(err => console.log(err));
+        axios.post('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata', userData)
+             .then(res => {
+                 console.log(res);
+                 const createdUser = res.data; // User data created on the server
 
-// Retrieving user data using Axios (optional)
-axios.get('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata')
-     .then(res => {
-         const userDataFromServer = res.data; // User data retrieved from the server
-         console.log(userDataFromServer);
-         // You can perform further actions with the retrieved data here
-     })
-     .catch(err => console.log(err));
+                 const li = document.createElement('li');
+                 li.textContent = `Name: ${createdUser.name}, Email: ${createdUser.email}, Password: ${createdUser.password}`;
+                 const deleteButton = document.createElement('button');
+                 deleteButton.textContent = 'Delete';
+                 const editButton = document.createElement('button');
+                 editButton.textContent = 'Edit';
 
+                 deleteButton.addEventListener('click', function() {
+                     deleteUser(createdUser._id, li);
+                 });
 
-        const li = document.createElement('li');
-        li.textContent = `Name: ${userData_deserialize.name}, Email: ${userData_deserialize.email}, Password: ${userData_deserialize.password}`;
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = 'Delete';
-        const editButton = document.createElement('button');
-        editButton.textContent = 'edit';
+                 editButton.addEventListener('click', function() {
+                     populateFormFields(createdUser); // Populate form fields for editing
+                     editingLi = li; // Store the editing li element for updating later
+                 });
 
-        deleteButton.addEventListener('click', function() {
-            localStorage.removeItem('user');
-            userList.removeChild(li);
-        });
+                 li.appendChild(deleteButton);
+                 li.appendChild(editButton);
+                 userList.appendChild(li);
+             })
+             .catch(err => console.log(err));
 
-        editButton.addEventListener('click', function() {
-            populateFormFields(userData_deserialize); // Populate form fields for editing
-            editingLi = li; // Store the editing li element for updating later
-        });
-
-        li.appendChild(deleteButton);
-        li.appendChild(editButton);
-        userList.appendChild(li);
-
+        alert('User data saved via Axios!');
     });
+
+    function deleteUser(userId, li) {
+        axios.delete(`https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata/${userId}`)
+             .then(() => {
+                 userList.removeChild(li);
+             })
+             .catch(err => console.log(err));
+    }
 
     function populateFormFields(userData) {
         document.getElementById('name').value = userData.name;
@@ -101,21 +97,22 @@ axios.get('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata')
                 password: password
             };
 
-            const editedText = `Name: ${name}, Email: ${email}, Password: ${password}`;
-            editingLi.textContent = editedText;
-            
-            // Update local storage or perform other necessary updates here
-            editingLi = null; // Clear the editing reference
+            axios.put(`https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata/${userData._id}`, updatedData)
+                 .then(() => {
+                     const editedText = `Name: ${name}, Email: ${email}, Password: ${password}`;
+                     editingLi.textContent = editedText;
+                     editingLi = null; // Clear the editing reference
+                 })
+                 .catch(err => console.log(err));
         }
         
         resetForm();
     });
+
     function resetForm() {
         form.reset();
     }
 });
-
-
 </script>
 
 </body>
