@@ -40,7 +40,11 @@ document.addEventListener('DOMContentLoaded', function() {
         };
 
         // Convert the object to a JSON string and save to local storage
-        localStorage.setItem('user', JSON.stringify(userData));
+        // localStorage.setItem('user', JSON.stringify(userData));
+
+        axios.post('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata', userData)
+             .then(res => console.log(res))
+             .catch(err => console.log(err))
 
         alert('User data saved to local storage!');
         console.log(localStorage.getItem('user'));
