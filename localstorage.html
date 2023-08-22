@@ -33,23 +33,30 @@ document.addEventListener('DOMContentLoaded', function() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
 
-        const userData = {
-            name: name,
-            email: email,
-            password: password
-        };
+const userData = {
+    name: name,
+    email: email,
+    password: password
+};
 
-        // Convert the object to a JSON string and save to local storage
-        // localStorage.setItem('user', JSON.stringify(userData));
+// Save user data using Axios
+axios.post('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata', userData)
+     .then(res => {
+         console.log(res.data); // The response data from the server
+         alert('User data saved via Axios!');
+         // You can perform further actions with the response data here
+     })
+     .catch(err => console.log(err));
 
-        axios.post('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata', userData)
-             .then(res => console.log(res))
-             .catch(err => console.log(err))
+// Retrieving user data using Axios (optional)
+axios.get('https://crudcrud.com/api/04e5026aae7c44249bb13acc4d8c92ab/postdata')
+     .then(res => {
+         const userDataFromServer = res.data; // User data retrieved from the server
+         console.log(userDataFromServer);
+         // You can perform further actions with the retrieved data here
+     })
+     .catch(err => console.log(err));
 
-        alert('User data saved to local storage!');
-        console.log(localStorage.getItem('user'));
-
-        let userData_deserialize = JSON.parse(localStorage.getItem('user'));
 
         const li = document.createElement('li');
         li.textContent = `Name: ${userData_deserialize.name}, Email: ${userData_deserialize.email}, Password: ${userData_deserialize.password}`;
